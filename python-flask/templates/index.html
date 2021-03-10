@@ -1,0 +1,56 @@
+<!-- 9-Python Flask 網站前後端互動 - 超連結與圖片 -->
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>我的第一個網頁</title>
+</head>
+<body>
+    <h3>網頁的主畫面</h3> -->
+<!-- 相對路徑：如果超連結的完整網址路徑(自己網站中的不同網頁)跟此 HTML 一樣，則可忽略一樣的路徑 http://127.0.0.1:3000 -->
+    <!-- <a href="http://127.0.0.1:3000/page">連結到網頁</a> -->
+    <!-- <a href="/page">連結到網頁</a> -->
+<!-- <br/> 換行 -->
+    <!-- <br/> 
+    <a href="/RWD">連結到 RWD </a>
+    <br/>  -->
+<!-- <img src="圖片網址"/> -->
+<!-- 圖片網址為：http://127.0.0.1:3000/static/18000.png -->
+<!-- 一樣可忽略本機網址 -->
+    <!-- <img src="http://127.0.0.1:3000/static/18000.png"/> -->
+    <!-- <img src="/static/18000.png"/>
+</body>
+</html> -->
+<!-- ===================================== -->
+<!-- 10-Python Flask 網站前後端互動 - 表單 Form -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>我的第一個網頁</title>
+</head>
+<body>
+    <h3>網頁的主畫面</h3>
+    <form action="/calculate">
+        數字 <input type="text" name="max" />
+        <button>計算結果</button>
+    </form>
+    <hr/>
+    <form action="/show">
+        姓名 <input type="text" name="n" />
+        <button>點擊送出表單</button>
+<!-- 在前端 input 框中輸入 Zack 後，點擊 -> 網址轉至：http://127.0.0.1:3000/show?n=Zack -->
+    </form>
+<!-- <hr/> 水平線 -->
+    <hr/>
+    <a href="/page">連結到網頁</a>
+    <br/> 
+    <a href="/RWD">連結到 RWD </a>
+    <br/> 
+    <img src="/static/18000.png" />
+</body>
+</html>
