@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Perpetual Calendar</title>
+    <style text="text/css">
+        #year-month{
+            width: 700px;
+            font-size: 40px; text-align: center;
+        }
+        .list{
+            display: flex; flex-wrap: wrap;
+            width: 700px; border: 5px solid blue;
+        }
+        .list>.date{
+            font-size: 20px;
+            width: 98px; height: 50px;
+            text-align: center; line-height: 50px;
+            border: 1px dashed black;
+        }
+        .list>.fadeout{
+            opacity: 0.3;
+        }
+    </style>
+    <!-- <script src="calendar.js"></script> -->
+</head>
+<body>
+    <h3 id="year-month"></h3>
+    <div class="list" id="list"></div>
+    <div>
+        <button onclick="preMonth();">上個月</button>
+        <button onclick="nextMonth();">下個月</button>
+    </div>
+    <script>
+        // 資料
+        let state = null;
+        // 初始化萬年曆
+        function init() {
+            state = { current: new Date() };
+            render();
+        }
+        // 上或下個月
+        function preMonth() {
+            state.current.setMonth(state.current.getMonth() - 1);
+            render();
+        }
+        function nextMonth() {
+            state.current.setMonth(state.current.getMonth() + 1);
+            render();
+        }
+        // 根據資料產生畫面
+        function render() {
+        // 取得月份標題
+            let head = document.querySelector('#year-month');
+        // 因為 getMonth 1 ~ 12 月的範圍是 0 ~ 11，故在顯示時需 + 1
+            head.textContent = state.current.getFullYear() + '/' + (state.current.getMonth() + 1);
+        // 取得該月份的全部日期
+        // document.querySelector：取得第一個符合選擇器(selector) 的 tag，此處為 id = "list"
+            let list = document.querySelector('#list');
+            list.innerHTML = ""; // 先清空畫面
+        // 取得該月份第一天
+            let firstDate = new Date(state.current.getFullYear(), state.current.getMonth(), 1);
+        // 取得該天是星期幾，0 ~ 6 表示星期日 ~ 六
+            // console.log(date.getDay());
+        // 往前算到星期日
+            let date = new Date(firstDate.getFullYear(), firstDate.getMonth(), 1);
+            date.setDate(date.getDate() - date.getDay());
+        // 畫出上個月的後幾天
+            while (date < firstDate) { // JS 可以直接比較 Date 物件
+                renderDate(date, list);
+                date.setDate(date.getDate() + 1);
+            }
+        // 畫出這個月的日期，每次畫一天，畫到該月份最後一天
+            while (date.getMonth() === state.current.getMonth()) {
+            // 畫出一天的格子
+                renderDate(date, list);
+            // 日期 + 1
+                date.setDate(date.getDate() + 1);
+            }
+        // 畫出下個月的前幾天
+            while (date.getDay() > 0) {
+                renderDate(date, list);
+                date.setDate(date.getDate() + 1);
+            }
+        }
+        function renderDate(date, list) {
+            let cell = document.createElement('div');
+        // 用三元表示式判定上個月或下個月的日期，是的話則置換 CSS
+            cell.className = 'date' + (date.getMonth() === state.current.getMonth() ? '' : ' fadeout');
+            cell.textContent = date.getDate();
+            list.appendChild(cell);
+        }
+        // 處理流程
+        init();
+    </script>
+</body>
+</html>
