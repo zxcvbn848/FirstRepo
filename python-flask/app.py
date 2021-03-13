@@ -267,6 +267,7 @@ app.run(port=3000)
 """
 # ============================
 # 10-Python Flask 網站前後端互動 - 表單 Form
+"""
 from flask import Flask # 載入 Flask
 from flask import request # 載入 request 物件
 from flask import render_template # 載入 render_template 函式
@@ -282,11 +283,66 @@ def index():
 def page():
     return render_template("page.html")
 
+# 處理路徑 /show 的對應函式
+@app.route("/show")
+def show():
+# get("參數名稱", "預設值") 中的參數名稱：需對應 index.html 中,
+# <input type="text" name="參數名稱" /> 中的參數名稱
+    name = request.args.get("n", "")
+    return "歡迎光臨，" + name
+
+# 處理路徑 /calculate 的對應函式
+@app.route("/calculate")
+def calculate():
+    maxNumber = request.args.get("max", "")
+    maxNumber = int(maxNumber)
+    result = 0
+    for n in range(1, maxNumber + 1):
+        result += n
+    return render_template("result.html", data = result)
+
 # 處理路徑 /RWD 的對應函式
 # 測試回傳 WK1 作業。CSS 檔案需放在 static 資料夾中，並在 HTML 內連結 HTML 和 CSS
 @app.route("/RWD")
 def RWD():
     return render_template("WK1-RWD.html")
+
+# 處理路徑 /AJAX 的對應函式
+# 測試回傳 WK3 作業。CSS & JS 檔案需放在 static 資料夾中，並在 HTML 內連結 HTML 和 CSS & JS
+@app.route("/AJAX")
+def AJAX():
+    return render_template("WK3_JS-AJAX-Visual.html")
+
+# 啟動網站伺服器，可透過 port 參數指定埠號
+# app.run(port=3000)
+# 若要上傳至 heroku 則需使用下述方式
+if __name__ == "__main__":
+    app.run()
+"""
+# ============================
+# 11-Python Flask 網站前後端互動 - 連線方法 GET、POST
+from flask import Flask # 載入 Flask
+from flask import request # 載入 request 物件
+from flask import render_template # 載入 render_template 函式
+app=Flask(__name__, static_folder="static", static_url_path="/static") 
+
+# 使用 GET 方法，處理路徑 / 的對應函式
+@app.route("/")
+def index():
+    return render_template("index.html")
+
+# 因為前端發送請求到 / 路徑只會用 GET 方法，故不能限定為 POST
+"""
+# 使用 POST 方法，處理路徑 / 的對應函式
+@app.route("/" methods=["POST"])
+def index():
+    return render_template("index.html") # Method Not Allowed
+"""
+
+# 處理路徑 /page 的對應函式
+@app.route("/page")
+def page():
+    return render_template("page.html")
 
 # 處理路徑 /show 的對應函式
 @app.route("/show")
@@ -296,15 +352,31 @@ def show():
     name = request.args.get("n", "")
     return "歡迎光臨，" + name
 
-@app.route("/calculate")
+# 使用 POST 方法，處理路徑 /calculate 的對應函式
+@app.route("/calculate", methods=["POST"])
 def calculate():
-    maxNumber = request.args.get("max", "")
+    # 接收 GET 方法的 Query String
+    # maxNumber = request.args.get("max", "")
+    # 接收 POST 方法的 Query String
+    maxNumber = request.form["max"]
     maxNumber = int(maxNumber)
     result = 0
     for n in range(1, maxNumber + 1):
         result += n
     return render_template("result.html", data = result)
- 
+
+# 處理路徑 /RWD 的對應函式
+# 測試回傳 WK1 作業。CSS 檔案需放在 static 資料夾中，並在 HTML 內連結 HTML 和 CSS
+@app.route("/RWD")
+def RWD():
+    return render_template("WK1-RWD.html")
+
+# 處理路徑 /AJAX 的對應函式
+# 測試回傳 WK3 作業。CSS & JS 檔案需放在 static 資料夾中，並在 HTML 內連結 HTML 和 CSS & JS
+@app.route("/AJAX")
+def AJAX():
+    return render_template("WK3_JS-AJAX-Visual.html")
+
 # 啟動網站伺服器，可透過 port 參數指定埠號
-app.run(port=3000)
-# ============================
+if __name__ == "__main__":
+    app.run()

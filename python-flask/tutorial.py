@@ -608,7 +608,7 @@ app.run(port=3000)
     # 超連結：簡易的點擊介面
     # 表單：可傳送額外資料，可設定更多連線細節的介面
 
-# 前端 HTML 程式 ----------------------------> 後端 HTML 程式  
+# 前端 HTML 程式 ----------------------------> 後端 Python 程式  
             # 發出請求到「網址路徑?data=使用者的輸入」                                         
                                             @app.route("網址路徑")  
 <form action="網址路徑">                     def handle():    
@@ -645,6 +645,8 @@ app.run(port=3000)
     <a href="/page">連結到網頁</a>
     <br/> 
     <a href="/RWD">連結到 RWD </a>
+    <br/>
+    <a href="/AJAX">連結到 AJAX </a>
     <br/> 
     <img src="/static/18000.png" />
 </body>
@@ -687,11 +689,111 @@ def index():
 def page():
     return render_template("page.html")
 
+# 處理路徑 /show 的對應函式
+@app.route("/show")
+def show():
+# get("參數名稱", "預設值") 中的參數名稱：需對應 index.html 中,
+# <input type="text" name="參數名稱" /> 中的參數名稱
+    name = request.args.get("n", "")
+    return "歡迎光臨，" + name
+
+# 處理路徑 /calculate 的對應函式
+@app.route("/calculate")
+def calculate():
+    maxNumber = request.args.get("max", "")
+    maxNumber = int(maxNumber)
+    result = 0
+    for n in range(1, maxNumber + 1):
+        result += n
+    return render_template("result.html", data = result)
+
 # 處理路徑 /RWD 的對應函式
 # 測試回傳 WK1 作業。CSS 檔案需放在 static 資料夾中，並在 HTML 內連結 HTML 和 CSS
 @app.route("/RWD")
 def RWD():
     return render_template("WK1-RWD.html")
+
+# 處理路徑 /AJAX 的對應函式
+# 測試回傳 WK3 作業。CSS & JS 檔案需放在 static 資料夾中，並在 HTML 內連結 HTML 和 CSS & JS
+@app.route("/AJAX")
+def AJAX():
+    return render_template("WK3_JS-AJAX-Visual.html")
+
+# 啟動網站伺服器，可透過 port 參數指定埠號
+# app.run(port=3000)
+# 若要上傳至 heroku 則需使用下述方式
+if __name__ == "__main__":
+    app.run()
+# ============================
+# 11-Python Flask 網站前後端互動 - 連線方法 GET、POST
+# 連線方法 (Method)：前端可用不同的連線方法，連線到同一網址
+# 簡單的比喻：
+    # 網址：收件地址
+    # 方法：普通信件、限時快遞
+# 兩種常見的方法：
+    # GET、POST
+# 其他方法：
+    # PUT、DELETE、PATCH
+
+# 透過表單設定連線方法
+# 1.使用 GET 方法做前後端互動
+# 沒有明確設定的話，代表預設使用 GET 方法
+# 前端 HTML 程式 ----------------------------> 後端 Python 程式  
+    # 使用 GET 方法，發出請求到「網址路徑?data=使用者的輸入」                                         
+                                            @app.route("網址路徑")  
+<form action="網址路徑">                     def handle():    
+    <input type="text" name="data" />           input = request.args.get("data", "")
+    <button>點擊送出表單</button>                return "給前端的回應"
+</form>                                         
+# 可以明確設定 GET 方法
+# 前端 HTML 程式 ----------------------------> 後端 Python 程式  
+    # 使用 GET 方法，發出請求到「網址路徑?data=使用者的輸入」                                         
+                                            @app.route("網址路徑", methods=["GET"])  
+<form action="網址路徑" method="GET">            def handle():    
+    <input type="text" name="data" />           input = request.args.get("data", "")
+    <button>點擊送出表單</button>                return "給前端的回應"
+</form>                                         
+
+# 2.使用 POST 方法做前後端互動
+# 前端 HTML 程式 ----------------------------> 後端 Python 程式  
+            # 使用 POST 方法，發出請求到「網址路徑」
+            # data=使用者的輸入不顯示在網址後面，另外存放                                         
+                                            @app.route("網址路徑", methods=["POST"])  
+<form action="網址路徑" method="POST">           def handle():    
+    <input type="text" name="data" />           input = request.form["data"]
+    <button>點擊送出表單</button>                return "給前端的回應"
+</form>                                         
+
+# 前後端互動：不同的互動方式，使用的連線方法不同
+    # 直接輸入網址：GET
+    # 超連結：GET
+    # 表單：可設定 GET 或 POST
+
+# POST 方法：輸入字串後不會出現「?參數名稱=資料」，可用來處理機密資訊
+# ======
+# In app.py:
+from flask import Flask # 載入 Flask
+from flask import request # 載入 request 物件
+from flask import render_template # 載入 render_template 函式
+app=Flask(__name__, static_folder="static", static_url_path="/static") 
+
+# 使用 GET 方法，處理路徑 / 的對應函式
+@app.route("/")
+def index():
+    return render_template("index.html")
+
+# 因為前端發送請求到 / 路徑只會用 GET 方法，故不能限定為 POST
+"""
+# 使用 POST 方法，處理路徑 / 的對應函式
+@app.route("/" methods=["POST"])
+def index():
+    return render_template("index.html") # Method Not Allowed
+"""
+
+# 處理路徑 /page 的對應函式
+@app.route("/page")
+def page():
+    return render_template("page.html")
 
 # 處理路徑 /show 的對應函式
 @app.route("/show")
@@ -701,15 +803,37 @@ def show():
     name = request.args.get("n", "")
     return "歡迎光臨，" + name
 
-@app.route("/calculate")
+# 使用 POST 方法，處理路徑 /calculate 的對應函式
+@app.route("/calculate", methods=["POST"])
 def calculate():
-    maxNumber = request.args.get("max", "")
+    # 接收 GET 方法的 Query String
+    # maxNumber = request.args.get("max", "")
+    # 接收 POST 方法的 Query String
+    maxNumber = request.form["max"]
     maxNumber = int(maxNumber)
     result = 0
     for n in range(1, maxNumber + 1):
         result += n
-    return render_template("result.html", data = result) # data 為動態資料欄位
- 
+    return render_template("result.html", data = result)
+
+# 處理路徑 /RWD 的對應函式
+# 測試回傳 WK1 作業。CSS 檔案需放在 static 資料夾中，並在 HTML 內連結 HTML 和 CSS
+@app.route("/RWD")
+def RWD():
+    return render_template("WK1-RWD.html")
+
+# 處理路徑 /AJAX 的對應函式
+# 測試回傳 WK3 作業。CSS & JS 檔案需放在 static 資料夾中，並在 HTML 內連結 HTML 和 CSS & JS
+@app.route("/AJAX")
+def AJAX():
+    return render_template("WK3_JS-AJAX-Visual.html")
+
 # 啟動網站伺服器，可透過 port 參數指定埠號
-app.run(port=3000)
+if __name__ == "__main__":
+    app.run()
+# ======
+# 觀察連線方法：
+# F12 -> Network -> F5 -> 點擊任一請求 -> Headers -> Request Method
+# POST 方法的資料：
+# Headers 拉到最底下的 Form Data 欄位，點選 view source
 # ============================
