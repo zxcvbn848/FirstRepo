@@ -1,0 +1,470 @@
+<!-- 9-React 前端開發：JSX 語法與 Babel 編譯器 -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>React</title>
+    <script crossorigin src="https://unpkg.com/react@17/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@17/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script type="text/babel">
+        // 以下組件設計，使用 JSX 語法
+        class MyHead extends React.Component {
+            render() {
+                // 取代 React.createElement('h1', null, 'Hello Zack') 
+                return <h1>Hello Zack</h1>;
+            }
+        }
+        window.addEventListener('load', () => {
+            let myElement = <MyHead/>; // 取代 React.createElement(MyHead)
+            ReactDOM.render(
+                myElement, document.body
+            );
+        });
+    </script>
+</head>
+<body>
+    
+</body>
+</html>
+<!-- ========================== -->
+<!-- 10-React 前端開發：JSX 基本使用與動態資料 -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>React</title>
+    <script crossorigin src="https://unpkg.com/react@17/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@17/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script type="text/babel">
+        class MyHead extends React.Component {
+            render() {      
+            // 取代 React.createElement("div", { className: "head" }, "Hello Zack" + this.props.level) 
+                return <div className="head">Hello Zack { this.props.level }</div>;
+            }
+        }
+        class MyHeadList extends React.Component {
+            render() {
+                return <div>
+                    <MyHead level="1"/>
+                    <MyHead level="2"/>
+                    <MyHead level="3"/> 
+                </div>
+            }
+        }
+        window.addEventListener('load', () => {
+            let elem = <MyHeadList/>; // React.createElement(MyHeadList);
+            ReactDOM.render(
+                elem, document.body
+            );
+        });
+    </script>
+</head>
+<body>
+    
+</body>
+</html>
+<!-- ========================== -->
+<!-- 11-React 前端開發：JSX 套用樣式 CSS Style -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>React</title>
+    <script crossorigin src="https://unpkg.com/react@17/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@17/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <style type="text/css">
+        .head{ font-size: 24px; font-weight: bold; }
+    </style>
+    <script type="text/babel">
+        class MyHead extends React.Component {
+            render() {      
+            // 取代 React.createElement("div", { className: "head", style: { color: this.props.color } }, "Hello Zack" + this.props.level) 
+            // style={ JSX } 行內樣式：this.props.color 可動態調整每一個 MyHead 標籤的 color 屬性
+                return <div className="head" style={{ color: this.props.color }}>Hello Zack { this.props.level }</div>;
+            }
+        }
+        class MyHeadList extends React.Component {
+            render() {
+                return <div>
+                    <MyHead level="1" color="red" />
+                    <MyHead level="2" color="green" />
+                    <MyHead level="3" color="blue" /> 
+                </div>
+            }
+        }
+        window.addEventListener('load', () => {
+            let elem = <MyHeadList/>; // React.createElement(MyHeadList);
+            ReactDOM.render(
+                elem, document.body
+            );
+        });
+    </script>
+</head>
+<body>
+    
+</body>
+</html>
+<!-- ========================== -->
+<!-- 12-React 前端開發：事件處理 Event Handling -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>React</title>
+    <script crossorigin src="https://unpkg.com/react@17/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@17/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <style type="text/css">
+        .head-3{ font-size: 1.2em; font-weight: bold; }
+    </style>
+    <script type="text/babel">
+        class MyHead extends React.Component {
+            constructor(props) {
+                super(props);
+                this.state = { color: "red" };
+            }
+            render() {      
+                return <div className = { "head-" + this.props.level }
+                style = {{ color: this.state.color }}
+                onClick = { this.clickHandler.bind(this) }
+                onMouseOver = { this.mouseOverHandler.bind(this) }
+                // 老師出的作業，未解決
+                onMouseOut = { this.mouseOutHandler.bind(this) }>Hello Zack</div>;
+            }
+            clickHandler(e) {
+                // 當使用者點擊，把顏色換掉
+                this.setState({ color: "blue" });
+            }
+            mouseOverHandler(e) {
+                this.setState({ color: "green" });
+            }
+            mouseOutHandler(e) {
+                // 未解決
+                this.setState({ color: this.state.color })
+            }
+        }
+        window.addEventListener('load', () => {
+            ReactDOM.render(<MyHead level="3"/>, document.body);
+        });
+    </script>
+</head>
+<body>
+    
+</body>
+</html>
+<!-- ========================== -->
+<!-- 13-React 前端開發：表單處理 Form Handling -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>React</title>
+    <script crossorigin src="https://unpkg.com/react@17/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@17/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <style type="text/css">
+        .head-3{ font-size: 1.2em; font-weight: bold; }
+    </style>
+    <script type="text/babel">
+        class MyForm extends React.Component {
+            constructor(props) {
+                super(props);
+                this.state = {
+                    name: "",
+                    gender: "male",
+                    story: ""
+                };
+            }
+            render() {
+                return <form onSubmit = { this.handleSubmit.bind(this) }>
+                    Name <input type="text" value = {this.state.name}
+                    onChange = {this.handleNameChange.bind(this)} />
+                    <br/>
+                    Gender <select value = { this.state.gender } onChange = { this.handleGenderChange.bind(this) }>
+                        <option value="male">男</option>    
+                        <option value="female">女</option>    
+                    </select>
+                    <br/>
+                    Story <textarea value = { this.state.story } onChange = { this.handleStoryChange.bind(this) } />
+                    <br/>
+                    <input type="submit" value="Submit" />
+                </form>;
+            }
+            handleStoryChange(e) {
+                this.setState({ story: e.currentTarget.value });
+            }
+            handleGenderChange(e) {
+                this.setState({ gender: e.currentTarget.value });
+            }
+            handleNameChange(e) {
+                this.setState({ name: e.currentTarget.value })
+            }
+            handleSubmit(e) {
+                e.preventDefault(); 
+                console.log('表單送出'); 
+                console.log('Name: ' + this.state.name); 
+                console.log('Gender: ' + this.state.gender); 
+                console.log('Story: ' + this.state.story); 
+                // 根據使用者輸入的資料，進行任何想要的運算、邏輯
+            }
+        }
+        window.addEventListener('load', () => {
+            ReactDOM.render(<MyForm/>, document.body);
+        });
+    </script>
+</head>
+<body>
+    
+</body>
+</html>
+<!-- ========================== -->
+<!-- 14-React 前端開發：程式碼分工 Code Responsibility -->
+<!-- ========================== -->
+<!-- 15-React 前端開發：選項開關元件實務範例 -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>React</title>
+    <script crossorigin src="https://unpkg.com/react@17/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@17/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <style type="text/css">
+        .switch{
+            width: 60px; height: 30px; background-color: #eeeeee; border-radius: 15px;
+        }
+        .switch>.btn{
+            width: 30px; height: 30px; background-color: #444444; border-radius: 15px;
+        }
+        .switch-on{
+            background-color: #ddffdd;
+        }
+        .switch-on>.btn{
+            /* margin-left 會讓按鈕左邊空出 30px ，所以會往右邊跑 */
+            background-color: #448844; margin-left: 30px;
+        }
+    </style>
+    <script type="text/babel">
+
+        class Switch extends React.Component {
+            constructor(props) {
+                super(props);
+                this.state = { on: false };
+            }
+            render() {
+                // 後面的 class 會覆蓋前面的 class 中相同的屬性，其他屬性則維持原樣
+                let className = "switch";
+                if (this.state.on) {
+                    className += " switch-on";
+                }
+
+                // { className } 動態套用 className
+                return <div onClick = { this.update.bind(this) } className={ className }>
+                        <div className="btn"></div>
+                    </div>
+
+            }
+            update() {
+                // 運用 ! 表示反運算
+                this.setState((currentState) => ({ on: !currentState.on}))
+            }
+        }
+        window.addEventListener('load', () => {
+            // React 厲害之處：可利用 id 創造多個相同的按鈕
+            ReactDOM.render( <Switch/>, document.getElementById('switch-0'));
+            ReactDOM.render( <Switch/>, document.getElementById('switch-1'));
+        });
+    
+    </script>
+</head>
+<body>
+    <div id="switch-0"></div>
+    <hr/>
+    <div id="switch-1"></div>
+</body>
+</html>
+<!-- ========================== -->
+<!-- 16-React 前端開發：井字遊戲實務範例 -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>tic-tac-toe-game</title>
+    <script crossorigin src="https://unpkg.com/react@17/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@17/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <style type="text/css">
+        .board{
+            width: 300px; height: 300px; margin: 50px auto;
+            border: 5px solid #000000; border-radius: 10px;
+            position: relative;
+        }
+        .board>.cell{
+            box-sizing: border-box;
+            width: 100px; height: 100px; line-height: 100px; font-size: 50px;
+            text-align: center; border: 1px solid #000000; cursor: pointer;
+            display: inline-block; vertical-align: middle;
+        }
+        .board>.line{
+            position: absolute; top: 0px; left: 0px;
+            width: 300px; height: 300px;
+        }
+    </style>
+    <script type="text/babel">
+        // 建立贏家的線條呈現
+        class Line extends React.Component {
+            render() {
+                let startX = this.props.startIndex % 3;
+                let startY = Math.floor(this.props.startIndex / 3);
+                let endX = this.props.endIndex % 3;
+                let endY = Math.floor(this.props.endIndex / 3);
+                return <svg className="line">
+                    <line x1 = { startX * 100 + 50 } y1 = { startY * 100 + 50 }
+                            x2 = { endX * 100 + 50 } y2 = { endY * 100 + 50 } 
+                            stroke = "red" stroke-width = "5"
+                    />
+                    </svg>
+            }
+        }
+        // 建立框框組件
+        class Cell extends React.Component {
+            render() {
+                let text = "";
+                if (this.props.mark === 0) {
+                    text = "O";
+                }
+                if (this.props.mark === 1) {
+                    text = "X";
+                }
+                return <div className="cell" onClick = { this.click.bind(this) }>{ text }</div>;
+            }
+            click() {
+                this.props.update(this.props.index);
+            }
+        }
+        // 建立遊戲盤組件
+        class Board extends React.Component {
+            constructor(props) {
+                super(props);
+                /*
+                    框框在 marks 中的編號 (index)
+                    0 1 2
+                    3 4 5
+                    6 7 8
+
+                */
+               // 應用程式狀態
+               this.state = {
+                   circle: 0,
+                   marks: [-1, -1, -1, -1, -1, -1, -1, -1, -1], // 框框標記： -1 無, 0: 圈, 1: 叉
+                   winner: null // 贏家的資訊： null 代表沒有
+               };
+            }
+            render() {
+                let cells = [];
+                for (let i = 0; i < this.state.marks.length; i++) {
+                    cells.push(<Cell index = {i} mark = { this.state.marks[i] }
+                        update = { this.updateMark.bind(this) } />);
+                }
+                if (this.state.winner !== null) {
+                    cells.push(<Line startIndex = {this.state.winner.startIndex }
+                        endIndex = {this.state.winner.endIndex} />);
+                }
+                return <div className="board">{ cells }</div>;
+            }
+            updateMark(index) {
+                // alert('Clicked:' + index);
+                let currentMark = this.state.marks[index];
+                /*
+                    a. 目前的標記必須是 -1，代表框框空白
+                    b. 目前沒有贏家
+                */
+                if (currentMark === -1 && this.state.winner === null) { 
+                    this.setState((preState) => {
+                        let mark = preState.circle % 2; // 根據回合數，決定要畫圈或叉
+                        preState.marks[index] = mark; // 把圈或叉的標記，記錄到 marks 裡面
+                        let winner = this.checkWinner(preState.marks); // 偵測贏家
+                        return {
+                            circle: preState.circle + 1,
+                            marks: preState.marks,
+                            winner: winner
+                        }
+                    })
+                }
+
+            }
+            checkWinner(marks) {
+                /*
+                    若有贏家，回傳
+                    { side: 贏家是圈或叉，startIndex：線條起點框框編號，endIndex：線條終點框框編號 }
+                */
+                /*
+                    框框在 marks 中的編號 (index)
+                    0 1 2
+                    3 4 5
+                    6 7 8
+
+                */
+                // 偵測水平方向的三條線是否有相同的標記
+                let index;
+                for (let y = 0; y < 3; y++) {
+                    if (marks[y * 3] !== -1 && marks[y * 3] === marks[y * 3 + 1] 
+                        && marks[y * 3 + 1] === marks[y * 3 + 2]) {
+                            return { side: marks[y * 3], startIndex: y * 3, endIndex: y * 3 + 2};
+                    }
+                }
+                // 偵測垂直方向的三條線是否有相同的標記
+                for (let x = 0; x < 3; x++) {
+                    if (marks[x] !== -1 && marks[x] === marks[3 + x] 
+                        && marks[3 + x] === marks[2 * 3 + x]) {
+                            return { side: marks[x], startIndex: x, endIndex: 2 * 3 + x };
+                    }
+                }
+                // 偵測斜線方向的兩條線是否有相同的標記
+                if (marks[0] !== -1 && marks[0] === marks[4] && marks[4] === marks[8]) {
+                    return { side: marks[0], startIndex: 0, endIndex: 8 };
+                }
+                else if (marks[2] !== -1 && marks[2] === marks[4] && marks[4] === marks[6]) {
+                    return { side: marks[2], startIndex: 2, endIndex: 6 };
+                }
+                // 目前還沒有贏家
+                return null;
+            }
+        }
+
+        window.addEventListener('load', () => {
+            ReactDOM.render(<Board/>, document.body);
+        });
+    
+    </script>
+</head>
+<body>
+</body>
+</html>
+<!-- ========================== -->
+<!-- 17-React 前端開發：Redux 簡介與安裝 -->
+<!-- ========================== -->
+<!-- 18- -->
+<!-- ========================== -->
+<!-- 19- -->
+<!-- ========================== -->
+<!-- 20- -->
+<!-- ========================== -->
+<!-- 21- -->
